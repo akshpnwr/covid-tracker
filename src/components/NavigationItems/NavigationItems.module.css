@@ -1,0 +1,13 @@
+.NavigationItems {
+  background-color: #393885;
+
+  font-size: 1.2rem;
+}
+
+.NavigationItems ul {
+  display: flex;
+  width: 70%;
+  margin: 0 auto;
+  justify-content: space-between;
+  list-style: none;
+}
