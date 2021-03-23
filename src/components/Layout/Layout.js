@@ -1,10 +1,13 @@
 import NavigationItems from '../NavigationItems/NavigationItems';
+import Map from '../Map/Map';
+import { Fragment } from 'react';
 
 const layout = () => {
   return (
-    <div>
+    <Fragment>
       <NavigationItems />
-    </div>
+      <Map />
+    </Fragment>
   );
 };
 
