@@ -1,9 +1,14 @@
-import { MapContainer, TileLayer, Popup, Marker } from 'react-leaflet';
+import {
+  MapContainer,
+  TileLayer,
+  Popup,
+  Marker,
+  useMapEvents,
+} from 'react-leaflet';
 import './Map.css';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
 import icon from '../../components/Icon/Icon';
-import MyComponent from '../MyComponent/MyComponent';
 
 const Map = () => {
   const [pos, changePos] = useState([]);
@@ -13,6 +18,17 @@ const Map = () => {
       changePos([position.coords.latitude, position.coords.longitude]);
     });
   }, []);
+
+  const MyComponent = () => {
+    useMapEvents({
+      click: (e) => {
+        console.log(e.latlng);
+        changePos([e.latlng.lat, e.latlng.lng]);
+      },
+    });
+    return null;
+  };
+
   let map = <h1 style={{ color: 'black' }}>Loading...</h1>;
 
   if (pos.length) {
