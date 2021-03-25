@@ -1,5 +1,5 @@
 import NavigationItems from '../NavigationItems/NavigationItems';
-import Map from '../Map/Map';
+import Map from '../../containers/Map/Map';
 import { Fragment } from 'react';
 
 const layout = () => {
