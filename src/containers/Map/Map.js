@@ -9,20 +9,34 @@ import './Map.css';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
 import icon from '../../components/Icon/Icon';
+import axios from 'axios';
 
 const Map = () => {
-  const [pos, changePos] = useState([]);
+  const [pos, changePos] = useState(false);
 
+  //runs only on mount and unmount
   useEffect(() => {
+    console.log('effect');
     navigator.geolocation.getCurrentPosition((position) => {
       changePos([position.coords.latitude, position.coords.longitude]);
     });
   }, []);
 
+  // everytime state update
+  useEffect(() => {
+    if (!pos) return;
+    axios
+      .get(`https://geocode.xyz/${pos.join(',')}?json=1`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.error('Not found 404 !'));
+  }, [pos]);
+
+  // Listens to click event o map
   const MyComponent = () => {
     useMapEvents({
       click: (e) => {
-        console.log(e.latlng);
         changePos([e.latlng.lat, e.latlng.lng]);
       },
     });
@@ -33,7 +47,7 @@ const Map = () => {
 
   if (pos.length) {
     map = (
-      <MapContainer center={pos} zoom={13} scrollWheelZoom={false}>
+      <MapContainer center={pos} zoom={3} scrollWheelZoom={false}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
