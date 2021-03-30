@@ -15,7 +15,7 @@ const API_KEY = 'AIzaSyDPEBHU_sCUeKz6ZIuMRRNjgi_x_7YFZ48';
 
 const Map = () => {
   const [pos, changePos] = useState(false);
-  let data;
+  let data, stateName;
 
   //runs only on mount and unmount
   useEffect(() => {
@@ -24,6 +24,7 @@ const Map = () => {
       .get(`https://api.covid19india.org/state_district_wise.json`)
       .then((res) => {
         console.log(res.data);
+        data = res.data;
       });
     navigator.geolocation.getCurrentPosition((position) => {
       changePos([position.coords.latitude, position.coords.longitude]);
@@ -41,7 +42,7 @@ const Map = () => {
         )}&sensor=true&key=${API_KEY}`
       )
       .then((res) => {
-        console.log(res);
+        stateName = res.data.plus_code.compound_code.split(',')[1].trim();
       })
       .catch((err) => console.error('Not found 404 !'));
     // axios
