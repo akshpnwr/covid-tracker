@@ -11,12 +11,20 @@ import { useEffect, useState } from 'react';
 import icon from '../../components/Icon/Icon';
 import axios from 'axios';
 
+const API_KEY = 'AIzaSyDPEBHU_sCUeKz6ZIuMRRNjgi_x_7YFZ48';
+
 const Map = () => {
   const [pos, changePos] = useState(false);
+  let data;
 
   //runs only on mount and unmount
   useEffect(() => {
     console.log('effect');
+    axios
+      .get(`https://api.covid19india.org/state_district_wise.json`)
+      .then((res) => {
+        console.log(res.data);
+      });
     navigator.geolocation.getCurrentPosition((position) => {
       changePos([position.coords.latitude, position.coords.longitude]);
     });
@@ -25,12 +33,23 @@ const Map = () => {
   // everytime state update
   useEffect(() => {
     if (!pos) return;
+
     axios
-      .get(`https://geocode.xyz/${pos.join(',')}?json=1`)
+      .get(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${pos.join(
+          ','
+        )}&sensor=true&key=${API_KEY}`
+      )
       .then((res) => {
         console.log(res);
       })
       .catch((err) => console.error('Not found 404 !'));
+    // axios
+    //   .get(`https://geocode.xyz/${pos.join(',')}?json=1`)
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => console.error('Not found 404 !'));
   }, [pos]);
 
   // Listens to click event o map
