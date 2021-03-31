@@ -7,9 +7,10 @@ import {
 } from 'react-leaflet';
 import './Map.css';
 import 'leaflet/dist/leaflet.css';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import icon from '../../components/Icon/Icon';
 import axios from 'axios';
+import Stats from '../../components/Stats/Stats';
 
 const API_KEY = 'AIzaSyDPEBHU_sCUeKz6ZIuMRRNjgi_x_7YFZ48';
 
@@ -67,7 +68,7 @@ const Map = () => {
 
   if (pos.length) {
     map = (
-      <MapContainer center={pos} zoom={3} scrollWheelZoom={false}>
+      <MapContainer center={pos} zoom={4} scrollWheelZoom={false}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -83,7 +84,12 @@ const Map = () => {
       </MapContainer>
     );
   }
-  return <div id="map">{map}</div>;
+  return (
+    <Fragment>
+      <div id="map">{map}</div>
+      <Stats />
+    </Fragment>
+  );
 };
 
 export default Map;
