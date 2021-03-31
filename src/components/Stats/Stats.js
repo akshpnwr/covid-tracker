@@ -3,10 +3,26 @@ import classes from './Stats.module.css';
 const stats = (props) => {
   return (
     <div className={classes.Stats}>
-      <Stat cases={props.activeCases} type="active" />
-      <Stat cases={props.deaths} type="deaths" />
-      <Stat cases={props.confirmed} type="confirmed" />
-      <Stat cases={props.recovered} type="recovered" />
+      <Stat
+        loadSpinner={props.loadSpinner}
+        cases={props.confirmed}
+        type="Confirmed"
+      />
+      <Stat
+        loadSpinner={props.loadSpinner}
+        cases={props.activeCases}
+        type="Active"
+      />
+      <Stat
+        loadSpinner={props.loadSpinner}
+        cases={props.recovered}
+        type="Recovered"
+      />
+      <Stat
+        loadSpinner={props.loadSpinner}
+        cases={props.deaths}
+        type="Deaths"
+      />
     </div>
   );
 };

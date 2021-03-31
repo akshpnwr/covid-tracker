@@ -1,11 +1,11 @@
 .Stat {
   background-color: #393885;
   color: white;
-  padding: 2em;
+  padding: 2em 1em;
   width: 22.5%;
   text-align: center;
 }
 
 .Stat h1 {
-  margin-bottom: 0.25em;
+  margin: 0 0 0.25em 0;
 }

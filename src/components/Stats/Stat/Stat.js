@@ -1,13 +1,21 @@
 import classes from './Stat.module.css';
+import Spinner from '../../Spinner/Spinner';
+import { Fragment } from 'react';
 
 const stat = (props) => {
-  console.log(props);
-  return (
-    <div className={classes.Stat}>
-      <h1>{props.cases}</h1>
-      <p>{props.type}</p>
-    </div>
-  );
+  console.log(props.loadSpinner);
+
+  let stats = <Spinner />;
+
+  if (props.loadSpinner)
+    stats = (
+      <Fragment>
+        <h1>{props.cases}</h1>
+        <p>{props.type}</p>
+      </Fragment>
+    );
+
+  return <div className={classes.Stat}>{stats}</div>;
 };
 
 export default stat;

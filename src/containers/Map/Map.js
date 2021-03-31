@@ -18,6 +18,7 @@ const Map = () => {
   const [pos, changePos] = useState(false);
   const [data, changeData] = useState(false);
   const [country, changeCountry] = useState(false);
+  const [loadSpinner, changeSpinner] = useState(false);
 
   //runs only on mount and unmount
   useEffect(() => {
@@ -47,7 +48,9 @@ const Map = () => {
           Deaths,
           Recovered,
         });
-      });
+        changeSpinner(true);
+      })
+      .catch((err) => console.error(`Not found 404 ! ${err}`));
   }, [country]);
 
   // everytime state update
@@ -73,6 +76,7 @@ const Map = () => {
     useMapEvents({
       click: (e) => {
         changePos([e.latlng.lat, e.latlng.lng]);
+        changeSpinner(false);
       },
     });
     return null;
@@ -102,6 +106,7 @@ const Map = () => {
     <Fragment>
       <div id="map">{map}</div>
       <Stats
+        loadSpinner={loadSpinner}
         activeCases={data.Active}
         confirmed={data.Confirmed}
         deaths={data.Deaths}
