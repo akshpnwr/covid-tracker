@@ -1,7 +1,11 @@
 import Stat from './Stat/Stat';
 import classes from './Stats.module.css';
+import Error from '../error/error';
+
 const stats = (props) => {
-  return (
+  console.log('error occured : ' + props.errorOccured);
+
+  let display = (
     <div className={classes.Stats}>
       <Stat
         loadSpinner={props.loadSpinner}
@@ -25,6 +29,10 @@ const stats = (props) => {
       />
     </div>
   );
+
+  if (props.errorOccured) display = <Error />;
+
+  return display;
 };
 
 export default stats;

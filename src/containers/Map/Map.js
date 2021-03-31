@@ -19,6 +19,7 @@ const Map = () => {
   const [data, changeData] = useState(false);
   const [country, changeCountry] = useState(false);
   const [loadSpinner, changeSpinner] = useState(false);
+  const [errorOccured, changeError] = useState(false);
 
   //runs only on mount and unmount
   useEffect(() => {
@@ -50,7 +51,10 @@ const Map = () => {
         });
         changeSpinner(true);
       })
-      .catch((err) => console.error(`Not found 404 ! ${err}`));
+      .catch((err) => {
+        console.error(`Not found 404 ! ${err}`);
+        changeError(true);
+      });
   }, [country]);
 
   // everytime state update
@@ -64,6 +68,7 @@ const Map = () => {
         )}&sensor=true&key=${API_KEY}`
       )
       .then((res) => {
+        console.log(res.data);
         changeCountry(
           res.data.results[0].formatted_address.split(' ').slice(-1)[0]
         );
@@ -77,6 +82,7 @@ const Map = () => {
       click: (e) => {
         changePos([e.latlng.lat, e.latlng.lng]);
         changeSpinner(false);
+        changeError(false);
       },
     });
     return null;
@@ -106,6 +112,7 @@ const Map = () => {
     <Fragment>
       <div id="map">{map}</div>
       <Stats
+        errorOccured={errorOccured}
         loadSpinner={loadSpinner}
         activeCases={data.Active}
         confirmed={data.Confirmed}

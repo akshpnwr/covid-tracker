@@ -3,8 +3,6 @@ import Spinner from '../../Spinner/Spinner';
 import { Fragment } from 'react';
 
 const stat = (props) => {
-  console.log(props.loadSpinner);
-
   let stats = <Spinner />;
 
   if (props.loadSpinner)
