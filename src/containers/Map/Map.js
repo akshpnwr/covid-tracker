@@ -16,21 +16,39 @@ const API_KEY = 'AIzaSyDPEBHU_sCUeKz6ZIuMRRNjgi_x_7YFZ48';
 
 const Map = () => {
   const [pos, changePos] = useState(false);
-  let data, stateName;
+  const [data, changeData] = useState(false);
+  const [country, changeCountry] = useState(false);
 
   //runs only on mount and unmount
   useEffect(() => {
-    console.log('effect');
-    axios
-      .get(`https://api.covid19india.org/state_district_wise.json`)
-      .then((res) => {
-        console.log(res.data);
-        data = res.data;
-      });
     navigator.geolocation.getCurrentPosition((position) => {
       changePos([position.coords.latitude, position.coords.longitude]);
     });
   }, []);
+
+  //runs every time country changes
+  useEffect(() => {
+    console.log(country);
+
+    axios
+      .get(
+        `https://api.covid19api.com/country/${
+          country ? country : 'India'
+        }?from=2021-03-31T00:00:00Z&to=${new Date().toISOString}`
+      )
+      .then((res) => {
+        const covidData = res.data.slice(-1);
+
+        const { Active, Confirmed, Deaths, Recovered } = covidData[0];
+
+        changeData({
+          Active,
+          Confirmed,
+          Deaths,
+          Recovered,
+        });
+      });
+  }, [country]);
 
   // everytime state update
   useEffect(() => {
@@ -43,15 +61,11 @@ const Map = () => {
         )}&sensor=true&key=${API_KEY}`
       )
       .then((res) => {
-        stateName = res.data.plus_code.compound_code.split(',')[1].trim();
+        changeCountry(
+          res.data.results[0].formatted_address.split(' ').slice(-1)[0]
+        );
       })
       .catch((err) => console.error('Not found 404 !'));
-    // axios
-    //   .get(`https://geocode.xyz/${pos.join(',')}?json=1`)
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => console.error('Not found 404 !'));
   }, [pos]);
 
   // Listens to click event o map
@@ -68,7 +82,7 @@ const Map = () => {
 
   if (pos.length) {
     map = (
-      <MapContainer center={pos} zoom={4} scrollWheelZoom={false}>
+      <MapContainer center={pos} zoom={3} scrollWheelZoom={false}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -87,7 +101,12 @@ const Map = () => {
   return (
     <Fragment>
       <div id="map">{map}</div>
-      <Stats />
+      <Stats
+        activeCases={data.Active}
+        confirmed={data.Confirmed}
+        deaths={data.Deaths}
+        recovered={data.Recovered}
+      />
     </Fragment>
   );
 };
