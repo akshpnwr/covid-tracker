@@ -21,6 +21,7 @@ const Map = () => {
   const [country, changeCountry] = useState(false);
   const [loadSpinner, changeSpinner] = useState(false);
   const [errorOccured, changeError] = useState(false);
+  const [graphData, changeGraphData] = useState(false);
 
   //runs only on mount and unmount
   useEffect(() => {
@@ -40,8 +41,8 @@ const Map = () => {
         }?from=2021-03-31T00:00:00Z&to=${new Date().toISOString}`
       )
       .then((res) => {
-        console.log(res.data.slice(-10));
         const covidData = res.data.slice(-1);
+        const graphDataRaw = res.data.slice(-15);
 
         const { Active, Confirmed, Deaths, Recovered } = covidData[0];
 
@@ -51,6 +52,17 @@ const Map = () => {
           Deaths,
           Recovered,
         });
+
+        const graphData = graphDataRaw.map((data) => {
+          const { Date: dateISO, Confirmed: value } = data;
+
+          const date = new Date(dateISO);
+          const label = `${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`;
+          return { label, value };
+        });
+
+        changeGraphData(graphData);
+
         changeSpinner(true);
       })
       .catch((err) => {
@@ -120,7 +132,8 @@ const Map = () => {
         deaths={data.Deaths}
         recovered={data.Recovered}
       />
-      <Graph />
+
+      <Graph errorOccured={errorOccured} graphData={graphData} />
     </Fragment>
   );
 };
