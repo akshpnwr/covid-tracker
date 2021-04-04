@@ -3,8 +3,6 @@ import classes from './Stats.module.css';
 import Error from '../error/error';
 
 const stats = (props) => {
-  console.log('error occured : ' + props.errorOccured);
-
   let display = (
     <div className={classes.Stats}>
       <Stat

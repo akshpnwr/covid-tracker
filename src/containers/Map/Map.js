@@ -11,6 +11,7 @@ import { Fragment, useEffect, useState } from 'react';
 import icon from '../../components/Icon/Icon';
 import axios from 'axios';
 import Stats from '../../components/Stats/Stats';
+import Graph from '../../components/Graph/Graph';
 
 const API_KEY = 'AIzaSyDPEBHU_sCUeKz6ZIuMRRNjgi_x_7YFZ48';
 
@@ -39,6 +40,7 @@ const Map = () => {
         }?from=2021-03-31T00:00:00Z&to=${new Date().toISOString}`
       )
       .then((res) => {
+        console.log(res.data.slice(-10));
         const covidData = res.data.slice(-1);
 
         const { Active, Confirmed, Deaths, Recovered } = covidData[0];
@@ -68,7 +70,6 @@ const Map = () => {
         )}&sensor=true&key=${API_KEY}`
       )
       .then((res) => {
-        console.log(res.data);
         changeCountry(
           res.data.results[0].formatted_address.split(' ').slice(-1)[0]
         );
@@ -119,6 +120,7 @@ const Map = () => {
         deaths={data.Deaths}
         recovered={data.Recovered}
       />
+      <Graph />
     </Fragment>
   );
 };
